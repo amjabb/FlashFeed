@@ -167,6 +167,29 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     
+    func getDataFromUrl(url: URL, completion: @escaping (_ data: Data?, _  response: URLResponse?, _ error: Error?) -> Void) {
+        URLSession.shared.dataTask(with: url) {
+            (data, response, error) in
+            completion(data, response, error)
+            }.resume()
+    }
+    
+    var profilePic: UIImage!
+    
+    func downloadImage(url: URL) {
+        print("Download Started")
+        getDataFromUrl(url: url) { (data, response, error)  in
+            guard let data = data, error == nil
+                else { return }
+            print(response?.suggestedFilename ?? url.lastPathComponent)
+            print("Download Finished")
+            DispatchQueue.main.async() { () -> Void in
+               self.profilePic = UIImage(data: data)?.circleMask
+                
+            }
+            
+        }
+    }
     
     
     //MARK - TableView operations
@@ -214,9 +237,13 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
             cell.postImage.image = nil
         }
         
+        
         //  cell.postImage.image = allTextPosts[indexPath.row]["image"] as? UIImage
         if cell.postImage.image != nil {
             print("This cell doesn't have an image")
+        }
+        if profilePic != nil {
+            cell.profilePicture.image = profilePic
         }
         cell.textPostLabel.text = allTextPosts[indexPath.row]["text"] as? String
         cell.hoursAgoLabel.text = timePassed
@@ -224,6 +251,8 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
         return cell
         
     }
+    
+    
     
     
     // MARK - swipe right to delete

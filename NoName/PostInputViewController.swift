@@ -19,6 +19,7 @@ UINavigationControllerDelegate {
     @IBAction func postButton(_ sender: Any) {
         iCloudUpdate()
         performSegue(withIdentifier: "Posted Text", sender: sender)
+        //self.navigationController?.tabBarController?.selectedIndex = 0
     }
     
     @IBOutlet weak var captureImageView: UIImageView!
@@ -73,6 +74,7 @@ UINavigationControllerDelegate {
     
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
+
     var session: AVCaptureSession?
     var stillImageOutput: AVCaptureStillImageOutput?
     var videoPreviewLayer: AVCaptureVideoPreviewLayer?

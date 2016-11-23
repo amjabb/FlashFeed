@@ -16,6 +16,7 @@ class TextPostView: UITableViewCell {
     @IBOutlet weak var hoursAgoLabel: UILabel!
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var postImage: UIImageView!
+    @IBOutlet weak var profilePicture: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
