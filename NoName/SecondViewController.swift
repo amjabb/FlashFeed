@@ -10,8 +10,10 @@ import UIKit
 import CloudKit
 import Google
 
-
+//This extension extends UIImage therfore any functions or attributes defined here can be used by
+//any UIImage object.
 extension UIImage {
+    //The attribute of type UIImage makes a square picture circle and adds a border to the picture.
     var circleMask: UIImage {
         let square = size.width < size.height ? CGSize(width: size.width, height: size.width) : CGSize(width: size.height, height: size.height)
         let imageView = UIImageView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: square))
@@ -29,25 +31,31 @@ extension UIImage {
     }
 }
 
+//This is the users profile page currently it shows a picture as well as the users name in a label, it also includes
+//a button which enables the user to change there profile picture from pictures in there library. This view should 
+//be different depending on whether the user is viewing there own profile to when other people are viewing the users profile.
 class SecondViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, GIDSignInUIDelegate {
-
+    
     
     @IBOutlet weak var profilePictureView: UIImageView!
     
     @IBOutlet weak var userNameLabel: UILabel!
     
+    //This button sets the imagePickers source type to the library and presents
+    //the library on the screen.
     @IBAction func loadPictureButton(_ sender: Any) {
         imagePicker.allowsEditing = false
         imagePicker.sourceType = .photoLibrary
-        
         present(imagePicker, animated: true, completion: nil)
     }
     
     
-    
+//  MARK - Pick image from Library
     let imagePicker = UIImagePickerController()
     
-     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+    //Image picker delegate function is called which receives selected picture and set the existing profile picture
+    //to be that image. NOTE: This function does not yet save the image.
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
             profilePictureView.contentMode = .scaleAspectFit
             profilePictureView.image = pickedImage.circleMask
@@ -56,6 +64,7 @@ class SecondViewController: UIViewController, UIImagePickerControllerDelegate, U
         dismiss(animated: true, completion: nil)
     }
     
+//  MARK - Download image from URL
     func getDataFromUrl(url: URL, completion: @escaping (_ data: Data?, _  response: URLResponse?, _ error: Error?) -> Void) {
         URLSession.shared.dataTask(with: url) {
             (data, response, error) in
@@ -67,7 +76,7 @@ class SecondViewController: UIViewController, UIImagePickerControllerDelegate, U
         print("Download Started")
         getDataFromUrl(url: url) { (data, response, error)  in
             guard let data = data, error == nil
-            else { return }
+                else { return }
             print(response?.suggestedFilename ?? url.lastPathComponent)
             print("Download Finished")
             DispatchQueue.main.async() { () -> Void in
@@ -76,11 +85,10 @@ class SecondViewController: UIViewController, UIImagePickerControllerDelegate, U
             }
         }
     }
-
     
+//  MARK - Navigation
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         imagePicker.delegate = self
         GIDSignIn.sharedInstance().uiDelegate = self
         if GIDSignIn.sharedInstance().currentUser.profile.hasImage {
@@ -93,93 +101,22 @@ class SecondViewController: UIViewController, UIImagePickerControllerDelegate, U
             }
         }
         
-//        NotificationCenter.default.addObserver(self,
-//                                                         selector: "receiveToggleAuthUINotification:",
-//                                                         name: NSNotification.Name(rawValue: "ToggleAuthUINotification"),
-//                                                         object: nil)
-        
         toggleAuthUI()
         // Do any additional setup after loading the view, typically from a nib.
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
-//    deinit {
-//        NotificationCenter.default.removeObserver(self,
-//                                                            name: NSNotification.Name(rawValue: "ToggleAuthUINotification"),
-//                                                            object: nil)
-//    }
-    
+//  MARK - Google AUTH extras
+    //Check whether the user is logged in this function is public
     func toggleAuthUI() {
         if (GIDSignIn.sharedInstance().hasAuthInKeychain()){
             // Signed in
-           userNameLabel.text = GIDSignIn.sharedInstance()?.currentUser?.profile?.name
+            userNameLabel.text = GIDSignIn.sharedInstance()?.currentUser?.profile?.name
             print("Logged In")
         } else {
             print("Not logged In")
         }
     }
     
-//    @objc func receiveToggleAuthUINotification(notification: NSNotification) {
-//        if (notification.name.rawValue == "ToggleAuthUINotification") {
-//            self.toggleAuthUI()
-//            if notification.userInfo != nil {
-//                let userInfo:Dictionary<String,String?> =
-//                    notification.userInfo as! Dictionary<String,String?>
-//                print(userInfo)
-//                self.userNameLabel.text = userInfo["statusText"]!
-//            }
-//        }
-//    }
     
-//    var ckUser: CKRecord {
-//        get {
-//            if _ckUser == nil {
-//                _ckUser = CKRecord(recordType: "User")
-//            }
-//            return _ckUser!
-//        }
-//        set{
-//            _ckUser = newValue
-//        }
-//    }
-//    
-//    let date = Date()
-//    let calender = NSCalendar.current
-//    
-//    private var _ckUser: CKRecord? {
-//        didSet {
-//            let userName = ckUser["userName"] as? String ?? ""
-//            let userProfilePicture = ckUser["userProfilePicture"] as? UIImage
-//            
-//        }
-//    }
-//    
-//    private let database = CKContainer.default().publicCloudDatabase
-//    
-//    private func iCloudUpdate(){
-//        if !(userNameLabel.text?.isEmpty)!{
-//            ckUser["userName"] = userNameLabel.text as CKRecordValue?
-//            ckUser["userProfilePicture"] = profilePictureView.image as! CKRecordValue?
-//            iCloudSaveRecord(recordToSave: ckUser)
-//        }
-//    }
-//    
-//    private func iCloudSaveRecord(recordToSave: CKRecord){
-//        database.save(recordToSave, completionHandler: { (savedRecord, error) in
-//            if error?._code == CKError.serverRecordChanged.rawValue {
-//                // optimistic locking failed, ignore
-//            } else if error != nil {
-//                print(error)
-//                //nothing
-//            }
-//        })
-//    }
-
-
-
 }
 

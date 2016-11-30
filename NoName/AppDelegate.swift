@@ -12,16 +12,16 @@ import CloudKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
-
+    
     var window: UIWindow?
-
-
+    
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         // Initialize sign-in
         var configureError: NSError?
         GGLContext.sharedInstance().configureWithError(&configureError)
-       // assert(configureError == nil, "Error configuring Google services: \(configureError)")
+        // assert(configureError == nil, "Error configuring Google services: \(configureError)")
         
         GIDSignIn.sharedInstance().delegate = self
         GIDSignIn.sharedInstance().clientID = "686325193777-pfi6gifs6qk8dki3o7j6e9p986dprbpt.apps.googleusercontent.com"
@@ -37,7 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             print("user is NOT signed in")
             /* code to show your login VC */
             let sb = UIStoryboard(name: "Main", bundle: nil)
-            if let tabBarVC = sb.instantiateViewController(withIdentifier: "LoginViewController") as? UIViewController {
+            if let tabBarVC = sb.instantiateViewController(withIdentifier: "LoginViewController") as UIViewController? {
                 window!.rootViewController = tabBarVC
             }
         }
@@ -51,8 +51,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         return GIDSignIn.sharedInstance().handle(url,
-                                                    sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String,
-                                                    annotation: options[UIApplicationOpenURLOptionsKey.annotation])
+                                                 sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as? String,
+                                                 annotation: options[UIApplicationOpenURLOptionsKey.annotation])
     }
     
     private let database = CKContainer.default().publicCloudDatabase
@@ -61,10 +61,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         if (error == nil) {
             var doesUserExist:Bool!
             self.database.fetch(withRecordID: CKRecordID(recordName: user.userID)) { fetchedPlace, error in
-                guard let fetchedPlace = fetchedPlace else {
+                guard fetchedPlace != nil else {
                     print("USER DOESNT EXIST")
                     doesUserExist = false
-                return
+                    return
                 }
                 print("USER DOES EXIST")
                 doesUserExist = true
@@ -72,24 +72,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             }
             sleep(4)
             if !doesUserExist {
-            // Perform any operations on signed in user here.
-            var ckUser: CKRecord?
-            if ckUser == nil {
-                ckUser = CKRecord(recordType: "User", recordID: CKRecordID(recordName: user.userID) )
-            }
-            ckUser?["userID"] = user.userID as CKRecordValue
-            ckUser?["userAuthToken"] = user.authentication.idToken as CKRecordValue
-            ckUser?["userName"] = user.profile.name as CKRecordValue
-            ckUser?["userEmail"] = user.profile.email as CKRecordValue
-                if user.profile.hasImage {
-                    ckUser?["profilePicture"] = String(describing: user.profile.imageURL(withDimension: 100)) as CKRecordValue?
+                // Perform any operations on signed in user here.
+                var ckUser: CKRecord?
+                if ckUser == nil {
+                    ckUser = CKRecord(recordType: "User", recordID: CKRecordID(recordName: user.userID) )
                 }
-            iCloudSaveRecord(recordToSave: ckUser!)
+                ckUser?["userID"] = user.userID as CKRecordValue
+                ckUser?["userAuthToken"] = user.authentication.idToken as CKRecordValue
+                ckUser?["userName"] = user.profile.name as CKRecordValue
+                ckUser?["userEmail"] = user.profile.email as CKRecordValue
+                if user.profile.hasImage {
+                    ckUser?["profilePicture"] = String(describing: user.profile.imageURL(withDimension: 100)!) as CKRecordValue?
+                }
+                iCloudSaveRecord(recordToSave: ckUser!)
             }
-            let userId = user.userID                  // For client-side use only!
-            let idToken = user.authentication.idToken // Safe to send to the server
-            let fullName = user.profile.name
-            let email = user.profile.email
+            _ = user.userID                  // For client-side use only!
+            _ = user.authentication.idToken // Safe to send to the server
+            _ = user.profile.name
+            _ = user.profile.email
             //print("Welcome: ,\(userId), \(idToken), \(fullName), \(email)")
             let sb = UIStoryboard(name: "Main", bundle: nil)
             if let tabBarVC = sb.instantiateViewController(withIdentifier: "TabController") as? UITabBarController {
@@ -101,16 +101,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
     }
     
     func iCloudSaveRecord(recordToSave: CKRecord){
-                database.save(recordToSave, completionHandler: { (savedRecord, error) in
-                    if error?._code == CKError.serverRecordChanged.rawValue {
-                        // optimistic locking failed, ignore
-                    } else if error != nil {
-                        print(error)
-                        //nothing
-                    }
-                })
-        print("Record saved to icloud")
+        database.save(recordToSave, completionHandler: { (savedRecord, error) in
+            if error?._code == CKError.serverRecordChanged.rawValue {
+                // optimistic locking failed, ignore
+            } else if error != nil {
+                print(error!)
+                //nothing
             }
+        })
+        print("Record saved to icloud")
+    }
     
     func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
         //

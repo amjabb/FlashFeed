@@ -25,6 +25,7 @@
 		F37B03BD1DDE537300599613 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F37B03BC1DDE537300599613 /* CloudKit.framework */; };
 		F37B03BF1DDE53FA00599613 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F37B03BE1DDE53FA00599613 /* GoogleService-Info.plist */; };
 		F37B03C11DDE616D00599613 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37B03C01DDE616D00599613 /* TabBarViewController.swift */; };
+		F37F50C91DEE4FE000408B96 /* UIImage+CKAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37F50C81DEE4FE000408B96 /* UIImage+CKAsset.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		F37B03BC1DDE537300599613 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		F37B03BE1DDE53FA00599613 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F37B03C01DDE616D00599613 /* TabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
+		F37F50C81DEE4FE000408B96 /* UIImage+CKAsset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+CKAsset.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,20 +103,21 @@
 			isa = PBXGroup;
 			children = (
 				F367C71A1DDBFC95007974C7 /* NoName.entitlements */,
-				F367C7161DDBB1C7007974C7 /* PopOverViewController.swift */,
 				F367C6FC1DDB910E007974C7 /* AppDelegate.swift */,
 				F367C7001DDB910E007974C7 /* SecondViewController.swift */,
 				F367C6FE1DDB910E007974C7 /* FirstViewController.swift */,
-				F367C7021DDB910E007974C7 /* Main.storyboard */,
-				F37B03B01DDE39D300599613 /* LoginViewController.swift */,
-				F37B03C01DDE616D00599613 /* TabBarViewController.swift */,
 				F367C7181DDBDDD8007974C7 /* PostInputViewController.swift */,
 				F34DE5AB1DE2949000C77ABD /* PictureTakenViewController.swift */,
+				F37F50C81DEE4FE000408B96 /* UIImage+CKAsset.swift */,
+				F367C7021DDB910E007974C7 /* Main.storyboard */,
 				F367C7051DDB910E007974C7 /* Assets.xcassets */,
 				F367C7071DDB910E007974C7 /* LaunchScreen.storyboard */,
 				F367C70A1DDB910E007974C7 /* Info.plist */,
 				F37B03BE1DDE53FA00599613 /* GoogleService-Info.plist */,
 				F367C7101DDB9773007974C7 /* TextPostView.swift */,
+				F367C7161DDBB1C7007974C7 /* PopOverViewController.swift */,
+				F37B03B01DDE39D300599613 /* LoginViewController.swift */,
+				F37B03C01DDE616D00599613 /* TabBarViewController.swift */,
 				F37B03AB1DDD9AE100599613 /* NoName-Bridging-Header.h */,
 			);
 			path = NoName;
@@ -272,6 +275,7 @@
 				F34DE5AC1DE2949000C77ABD /* PictureTakenViewController.swift in Sources */,
 				F367C7191DDBDDD8007974C7 /* PostInputViewController.swift in Sources */,
 				F367C6FD1DDB910E007974C7 /* AppDelegate.swift in Sources */,
+				F37F50C91DEE4FE000408B96 /* UIImage+CKAsset.swift in Sources */,
 				F367C7171DDBB1C7007974C7 /* PopOverViewController.swift in Sources */,
 				F367C6FF1DDB910E007974C7 /* FirstViewController.swift in Sources */,
 				F367C7111DDB9773007974C7 /* TextPostView.swift in Sources */,
